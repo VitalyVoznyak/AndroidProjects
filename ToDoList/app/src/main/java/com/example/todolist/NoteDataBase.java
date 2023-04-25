@@ -15,7 +15,7 @@ public abstract class NoteDataBase extends RoomDatabase {
             instance = Room.databaseBuilder(
                     application,
                     NoteDataBase.class,
-                    DB_NAME).allowMainThreadQueries().build();
+                    DB_NAME).build();
         }
         return instance;
     }
