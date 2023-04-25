@@ -13,7 +13,15 @@ import java.util.ArrayList;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHolder> {
     private ArrayList<Note> notes = new ArrayList<>();
-    public void setNotes(ArrayList<Note> notes){
+    private OnNoteClickListener onNoteClickListener;
+
+    public void setOnNoteClickListener(OnNoteClickListener onNoteClickListener) {
+        this.onNoteClickListener = onNoteClickListener;
+    }
+    public ArrayList<Note>getNotes(){
+        return new ArrayList<>(notes);
+    }
+    public void setNotes(ArrayList<Note> notes) {
         this.notes = notes;
         notifyDataSetChanged();
     }
@@ -35,7 +43,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         viewHolder.textViewNote.setText(note.getText());
 
         int colorResId;
-        switch (note.getPriority()){
+        switch (note.getPriority()) {
             case 0:
                 colorResId = android.R.color.holo_green_light;
                 break;
@@ -46,8 +54,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
                 colorResId = android.R.color.holo_red_light;
                 break;
         }
-        int color = ContextCompat.getColor(viewHolder.itemView.getContext(),colorResId);
+        int color = ContextCompat.getColor(viewHolder.itemView.getContext(), colorResId);
         viewHolder.textViewNote.setBackgroundColor(color);
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onNoteClickListener.onNoteClick(note);
+            }
+        });
     }
 
     @Override
@@ -55,12 +69,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NotesViewHol
         return notes.size();
     }
 
-    class NotesViewHolder extends RecyclerView.ViewHolder{
+    class NotesViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewNote;
 
         public NotesViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewNote = itemView.findViewById(R.id.textViewNote);
         }
+    }
+
+    interface OnNoteClickListener {
+        void onNoteClick(Note note);
     }
 }
