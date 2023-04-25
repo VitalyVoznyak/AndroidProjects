@@ -9,13 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 public class AddNoteActivity extends AppCompatActivity {
 
-    EditText editTextNote;
-    private RadioGroup radioGroup;
-    private RadioButton radioButtonLow, radioButtonMedium,radioButtonHigh;
+    private EditText editTextNote;
+    private RadioButton radioButtonLow;
+    private RadioButton radioButtonMedium;
     private Button buttonSave;
     private DataBase dataBase = DataBase.getInstance();
 
@@ -33,26 +32,32 @@ public class AddNoteActivity extends AppCompatActivity {
         });
     }
 
-
-
-    private void initViews(){
+    private void initViews() {
         editTextNote = findViewById(R.id.editTextNote);
-        radioGroup = findViewById(R.id.radioGroupPriority);
         radioButtonLow = findViewById(R.id.radioButtonLow);
         radioButtonMedium = findViewById(R.id.radioButtonMedium);
-        radioButtonHigh = findViewById(R.id.radioButtonHigh);
         buttonSave = findViewById(R.id.buttonSave);
     }
     private void saveNote(){
-        String noteName = editTextNote.getText().toString().trim();
-        int notePriorityId = radioGroup.getCheckedRadioButtonId();
-        int noteId = dataBase.getNotes().size();
-        Note note = new Note(noteId,noteName,notePriorityId);
-        dataBase.add(note);
+        String text = editTextNote.getText().toString().trim();
+        int priority = getPriority();
+        int id = dataBase.getNotes().size();
+        dataBase.add(new Note(id,text,priority));
+
         finish();
     }
-    public static Intent newIntend(Context context){
-        Intent intent = new Intent(context, AddNoteActivity.class);
-        return intent;
+    private int getPriority(){
+        int priority;
+        if(radioButtonLow.isChecked()){
+            priority = 0;
+        }else if(radioButtonMedium.isChecked()){
+            priority = 1;
+        } else {
+            priority = 2;
+        }
+        return priority;
+    }
+    public static Intent newIntent(Context context){
+        return new Intent(context, AddNoteActivity.class);
     }
 }

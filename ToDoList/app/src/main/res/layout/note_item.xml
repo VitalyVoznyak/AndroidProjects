@@ -4,12 +4,12 @@
     android:id="@+id/textViewNote"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="@color/white"
-    android:textSize="16sp"
-    android:padding="16dp"
     android:layout_margin="8dp"
-    tools:text = "Hello"
-    tools:background="@android:color/holo_red_dark"
+    android:padding="15dp"
+    android:textColor="@android:color/white"
+    android:textSize="16sp"
+    tools:background="@android:color/holo_green_light"
 
-    />
+    tools:text="Hello!">
 
+</TextView>

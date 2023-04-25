@@ -1,9 +1,9 @@
 package com.example.todolist;
 
 public class Note {
-    private  int id;
-    private  String text;
-    private  int priority;
+    private int id;
+    private String text;
+    private int priority;
 
     public Note(int id, String text, int priority) {
         this.id = id;

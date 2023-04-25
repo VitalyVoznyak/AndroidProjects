@@ -1,15 +1,10 @@
 package com.example.todolist;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,65 +16,60 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerViewNotes;
+    private LinearLayout linearLayoutNotes;
     private FloatingActionButton buttonAddNote;
-    private NotesAdapter notesAdapter;
+
     private DataBase dataBase = DataBase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initViews();
-        notesAdapter = new NotesAdapter();
-        notesAdapter.setOnNoteClickListener(new OnNoteClickListener() {
-            @Override
-            public void onNoteClick(Note note) {
-               // dataBase.remove(note.getId());
-                //showNodes();
-            }
-        });
-        recyclerViewNotes.setAdapter(notesAdapter);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Note note = notesAdapter.getNotes().get(viewHolder.getAdapterPosition());
-                dataBase.remove(viewHolder.getAdapterPosition());
-                showNodes();
-                Log.d("Roof","вайп работает");
-            }
-        });
-
         buttonAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(AddNoteActivity.newIntend(MainActivity.this));
+                startActivity(AddNoteActivity.newIntent(MainActivity.this));
             }
         });
-        showNodes();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         showNodes();
     }
 
     private void initViews(){
-        recyclerViewNotes = findViewById(R.id.recyclerViewNotes);
+        linearLayoutNotes = findViewById(R.id.linearLayoutNotes);
         buttonAddNote = findViewById(R.id.buttonAddNote);
     }
-
     private void showNodes(){
-        notesAdapter.setNotes(dataBase.getNotes());
+        linearLayoutNotes.removeAllViews();
+        for (Note note: dataBase.getNotes()) {
+            View view = getLayoutInflater().inflate(
+                    R.layout.note_item,
+                    linearLayoutNotes,
+                    false
+            );
+            TextView textViewNote = view.findViewById(R.id.textViewNote);
+            textViewNote.setText(note.getText());
+
+            int colorResId;
+            switch (note.getPriority()){
+                case 0:
+                    colorResId = android.R.color.holo_green_light;
+                    break;
+                case 1:
+                    colorResId = android.R.color.holo_orange_light;
+                    break;
+                default:
+                    colorResId = android.R.color.holo_red_light;
+                    break;
+            }
+            int color = ContextCompat.getColor(this,colorResId);
+            textViewNote.setBackgroundColor(color);
+            linearLayoutNotes.addView(view);
+        }
     }
 }
