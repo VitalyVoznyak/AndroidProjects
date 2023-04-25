@@ -23,14 +23,12 @@ public class MainActivity extends AppCompatActivity {
     private NotesAdapter notesAdapter;
     private FloatingActionButton buttonAddNote;
     private RecyclerView recyclerViewNotes ;
-    private NoteDataBase noteDataBase;
+    private DataBase dataBase = DataBase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        noteDataBase = NoteDataBase.getInstance(getApplication());
-
         initViews();
         notesAdapter = new NotesAdapter();
         notesAdapter.setOnNoteClickListener(new NotesAdapter.OnNoteClickListener() {
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 Note note = notesAdapter.getNotes().get(position);
-                noteDataBase.notesDao().remove(note.getId());
+                dataBase.remove(note.getId());
                 showNodes();
             }
         });
@@ -79,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAddNote = findViewById(R.id.buttonAddNote);
     }
     private void showNodes(){
-        notesAdapter.setNotes(noteDataBase.notesDao().getNotes());
+        notesAdapter.setNotes(dataBase.getNotes());
+
     }
 }
