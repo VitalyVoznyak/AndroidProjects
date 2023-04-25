@@ -42,7 +42,8 @@ public class AddNoteActivity extends AppCompatActivity {
         String text = editTextNote.getText().toString().trim();
         int priority = getPriority();
         int id = dataBase.getNotes().size();
-        dataBase.add(new Note(id,text,priority));
+        Note note = new Note(id,text,priority);
+        dataBase.add(note);
 
         finish();
     }

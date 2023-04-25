@@ -6,12 +6,11 @@ import java.util.Random;
 public class DataBase {
     private ArrayList<Note> notes = new ArrayList<>();
     private static DataBase instance = null;
-
     public static DataBase getInstance(){
         if (instance == null){
             instance = new DataBase();
         }
-        return new DataBase();
+        return instance;
     }
 
     public DataBase(){
