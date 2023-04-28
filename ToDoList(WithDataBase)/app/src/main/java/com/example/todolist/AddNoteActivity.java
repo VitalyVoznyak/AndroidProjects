@@ -1,8 +1,6 @@
 package com.example.todolist;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,14 +18,16 @@ public class AddNoteActivity extends AppCompatActivity {
     private RadioButton radioButtonLow;
     private RadioButton radioButtonMedium;
     private Button buttonSave;
-    private AddNoteViewModel viewModel;
+    private NoteDataBase dataBase;
+    private Handler handler = new Handler(Looper.myLooper());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
         initViews();
-        viewModel = new ViewModelProvider(this).get(AddNoteViewModel.class);
 
+        dataBase = NoteDataBase.getInstance(getApplication());
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,19 +42,23 @@ public class AddNoteActivity extends AppCompatActivity {
         radioButtonMedium = findViewById(R.id.radioButtonMedium);
         buttonSave = findViewById(R.id.buttonSave);
     }
-    public void saveNote(){
+    private void saveNote(){
         String text = editTextNote.getText().toString().trim();
         int priority = getPriority();
         Note note = new Note(0,text,priority);
-        viewModel.saveNote(note);
-        viewModel.getShouldCloseScreen().observe(this, new Observer<Boolean>() {
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void onChanged(Boolean shouldClose) {
-                if (shouldClose){
-                    finish();
-                }
+            public void run() {
+                dataBase.notesDao().add(note);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                });
             }
         });
+        thread.start();
     }
     private int getPriority(){
         int priority;
