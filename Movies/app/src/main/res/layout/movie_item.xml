@@ -18,6 +18,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@null"
             app:layout_constraintTop_toTopOf="parent"
+            android:minHeight="250dp"
             tools:src="@tools:sample/avatars"
             app:cardCornerRadius="16dp"/>
 

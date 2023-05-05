@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewMovies;
     private MoviesAdapter moviesAdapter;
+    private ProgressBar progressBar;
 
     @SuppressLint("CheckResult")
     @Override
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerViewMovies = findViewById(R.id.recyclerViewMovies);
         moviesAdapter = new MoviesAdapter();
+        progressBar = findViewById(R.id.progressBar);
 
         recyclerViewMovies.setAdapter(moviesAdapter);
         recyclerViewMovies.setLayoutManager(new GridLayoutManager(this,2));
@@ -43,6 +48,28 @@ public class MainActivity extends AppCompatActivity {
                 moviesAdapter.setMovies(movies);
             }
         });
-        viewModel.loadMovies();
+
+        viewModel.getIsLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoading) {
+                if (isLoading){
+                    progressBar.setVisibility(View.VISIBLE);
+                }else{
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+        moviesAdapter.setOnReachEndListener(new MoviesAdapter.OnReachEndListener() {
+            @Override
+            public void onReachEndListener() {
+                viewModel.loadMovies();
+            }
+        });
+        moviesAdapter.setOnMovieClickListener(new MoviesAdapter.OnMovieClickListener() {
+            @Override
+            public void onMovieClick(Movie movie) {
+                startActivity(MovieDetailActivity.newIntent(MainActivity.this,movie));
+            }
+        });
     }
 }

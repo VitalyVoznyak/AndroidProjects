@@ -1,6 +1,5 @@
 package com.example.movies;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     private List<Movie> movies = new ArrayList<>();
 
+
+    private OnReachEndListener onReachEndListener;
+    private OnMovieClickListener onMovieClickListener;
+
+
+
+    public void setOnReachEndListener(OnReachEndListener onReachEndListener) {
+        this.onReachEndListener = onReachEndListener;
+    }
+    public void OnMovieClickListener(OnMovieClickListener onMovieClickListener) {
+        this.onMovieClickListener = onMovieClickListener;
+    }
+
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
         notifyDataSetChanged();
@@ -39,6 +51,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Movie movie = movies.get(position);
+
+
         if (movie.getPoster()!=null){
             Glide.with(holder.itemView)
                     .load(movie.getPoster().getUrl())
@@ -56,12 +70,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         else {
             backgroundId = R.drawable.circle_red;
         }
-        //double rating = movieFromDocsOnBind.getRating().getKp();
-        //holder.textViewRating.setText(String.format("%.1f", rating));
 
         Drawable background = ContextCompat.getDrawable(holder.itemView.getContext(),backgroundId);
         holder.textViewRating.setBackground(background);
         holder.textViewRating.setText(String.valueOf(movie.getRating().getKp()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onMovieClickListener != null){
+                    onMovieClickListener.onMovieClick(movie);
+                }
+            }
+        });
+
+        if(position >= movies.size()-10 && onReachEndListener != null)
+        {
+            onReachEndListener.onReachEndListener();
+        }
     }
 
     @Override
@@ -69,6 +94,16 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         return movies.size();
     }
 
+    public void setOnMovieClickListener(OnMovieClickListener onMovieClickListener) {
+        this.onMovieClickListener = onMovieClickListener;
+    }
+
+    interface OnReachEndListener{
+        void onReachEndListener();
+    }
+    interface OnMovieClickListener{
+        void onMovieClick(Movie movie);
+    }
 
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
