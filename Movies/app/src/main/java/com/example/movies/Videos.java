@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Videos {
     @SerializedName("trailers")
-    List<Trailer> trailers;
+    private List<Trailer> trailers;
 
     public List<Trailer> getTrailers() {
         return trailers;

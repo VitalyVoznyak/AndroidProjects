@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class TrailerResponse {
     @SerializedName("videos")
-    Videos videos;
+    public Videos videos;
 
     public TrailerResponse(Videos videos) {
         this.videos = videos;
