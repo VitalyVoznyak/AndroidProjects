@@ -24,7 +24,7 @@ public class MainViewModel extends AndroidViewModel {
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private int page = 1;
-    MoviesDao moviesDao = MovieDatabase.getInstance(getApplication()).moviesDao();
+
 
     public MainViewModel(@NonNull Application application)
     {

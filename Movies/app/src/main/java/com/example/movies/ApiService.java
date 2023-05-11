@@ -11,9 +11,5 @@ public interface ApiService {
 
     @GET("movie?token=QVMF4DA-60Z4378-K6Y684P-RRW3AX4&field=id")
     Single<TrailerResponse> loadTrailers(@Query("search") int id);
-
-    @GET("v1/review?token=QVMF4DA-60Z4378-K6Y684P-RRW3AX4&field=movieId")
-    Single<ReviewResponse> loadReviews(@Query("search")int id );
 }
 //movie?token=QVMF4DA-60Z4378-K6Y684P-RRW3AX4@filed=id&search=326
-//https://api.kinopoisk.dev/v1/review?token=QVMF4DA-60Z4378-K6Y684P-RRW3AX4&sortField=movieId&search=326
