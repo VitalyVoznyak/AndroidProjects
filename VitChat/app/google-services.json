@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "258024808948",
+    "project_id": "vitchat-dc20d",
+    "storage_bucket": "vitchat-dc20d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258024808948:android:d360d7933b537d605b19a1",
+        "android_client_info": {
+          "package_name": "com.example.vitchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258024808948-lgdto0cq12j6aiss64i2ldv896dboshv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoOUs4AxUSNwmcMMdw7_9T-6Cv4TrFViI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258024808948-lgdto0cq12j6aiss64i2ldv896dboshv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
