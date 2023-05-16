@@ -15,4 +15,6 @@
     <string name="reset_password">Reset password</string>
     <string name="register">Register</string>
     <string name="reset_link_sent">The reset Link has een successfully sent</string>
+    <string name="edit_text">Edit text</string>
+    <string name="type_your_message">Type your message</string>
 </resources>
