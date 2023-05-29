@@ -8,7 +8,7 @@
     tools:context=".ChatActivity">
 
     <TextView
-        android:id="@+id/idTextViewTitle"
+        android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/cool_purpule"
@@ -24,9 +24,9 @@
         android:layout_width="12dp"
         android:layout_height="12dp"
         android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="@id/idTextViewTitle"
+        app:layout_constraintBottom_toBottomOf="@id/textViewTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/idTextViewTitle"
+        app:layout_constraintTop_toTopOf="@id/textViewTitle"
         tools:background="@drawable/circle_green" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -36,7 +36,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@id/editTextMessage"
-        app:layout_constraintTop_toBottomOf="@id/idTextViewTitle"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
         tools:listitem="@layout/my_message_item" />
 
     <EditText

@@ -26,30 +26,33 @@ import java.util.Random;
 
 public class UsersActivity extends AppCompatActivity {
 
+    private static final String EXTRA_CURRENT_USER_ID = "currentUserId";
+
     private RecyclerView recyclerViewUsers;
     private UsersAdapter usersAdapter;
     private UsersViewModel viewModel;
+    private String currentUserId;
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = database.getReference("Users");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
         initViews();
-
+        currentUserId = getIntent().getStringExtra(EXTRA_CURRENT_USER_ID);
 
         viewModel = new  ViewModelProvider(this).get(UsersViewModel.class);
         observeViewModel();
-//
-//                List<User> users = new ArrayList<>();
-//               for (int i = 0; i < 30; i++){
-//                       User user = new User(
-//                                "id" + i, "name" + i, "lastname" + 1,i,new Random().nextBoolean()
-//                                );
-//                        users.add(user);
-//                    }
-//        usersAdapter.setUsers(users);
+        usersAdapter.setOnUserClickListener(new UsersAdapter.OnUserClickListener() {
+            @Override
+            public void onUserClick(User user) {
+                Intent intent = ChatActivity.newIntent(UsersActivity.this,currentUserId,user.getId());
+                startActivity(intent);
+            }
+        });
     }
 
     private void initViews(){
@@ -59,9 +62,11 @@ public class UsersActivity extends AppCompatActivity {
         recyclerViewUsers.setAdapter(usersAdapter);
     }
 
-    public static Intent getIntent(Context context){
-        return new Intent(context, UsersActivity.class);
-    };
+    public static Intent newIntent(Context context, String currentUserId){
+        Intent intent =  new Intent(context, UsersActivity.class);
+        intent.putExtra(EXTRA_CURRENT_USER_ID,currentUserId);
+        return intent;
+    }
     public void observeViewModel(){
         viewModel.getUser().observe(this, new Observer<FirebaseUser>() {
             @Override
@@ -88,8 +93,21 @@ public class UsersActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.setUserOnline(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        viewModel.setUserOnline(false);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.item_logout){
+
             viewModel.logOut();
         }
         return super.onOptionsItemSelected(item);
